@@ -29,14 +29,24 @@ async (req, res, next) => {
 
 router.put('/:id',
  md.checkAccountId,
- md.checkAccountPayload, 
- md.checkAccountNameUnique,  
- (req, res, next) => {
-  // DO YOUR MAGIC
+ md.checkAccountPayload,  
+ async (req, res, next) => {
+  const updated = await Account.updateById(req.params.id, req.body)
+  res.json(updated)
+  try {
+   
+  } catch(err) {
+    next(err)
+  }
 });
 
-router.delete('/:id', md.checkAccountId, (req, res, next) => {
-  // DO YOUR MAGIC
+router.delete('/:id', md.checkAccountId, async (req, res, next) => {
+  try {
+    await Account.deleteById(req.params.id)
+    res.json(req.account)
+  } catch(err) {
+    next(err)
+  }
 })
 
 router.use((err, req, res, next) => { // eslint-disable-line
